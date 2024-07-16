@@ -17,6 +17,7 @@ const connectToMongoDB = async() => {
         //if there is no client, set the client. Only create client if there is no client
         try{
             client = await MongoClient.connect(uri, options)
+            console.log("Connected to MongoDB")
         }catch(error){
             console.log(error)
         }
