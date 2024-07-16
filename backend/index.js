@@ -6,6 +6,9 @@ const { connectToMongoDB } = require("./database");
 
 const app = express();
 
+//The line below is a middleware function that parses incoming requests with JSON payloads and makes the parsed data available in req.body
+app.use(express.json());
+
 
 const router = require("./routes");
 app.use("/api", router);
