@@ -23,6 +23,13 @@ router.get("/todos", async(req, res) =>{
 router.post("/todos", async(req, res) =>{
     const collection = getCollection();
     const { todo } = req.body;
+
+    if (!todo){
+        return res.status(400).json({ msg : "error no todo found"});
+    }
+
+    // todo = JSON.stringify(todo); // A way to convert json parameter to string
+
     const newTodo = await collection.insertOne({ todo, status:false});
     res.status(201).json({ todo, status:false, _id: newTodo.insertedId});
 });
@@ -41,6 +48,10 @@ router.put("/todos/:id", async(req, res) =>{
     const collection = getCollection();
     const _id = new ObjectId(req.params.id); //convert the id parameter from the request into a MongoDB ObjectId. // if /todos/:test then req.params.test
     const { status } = req.body; //extract the status property from req.body, equiv to const status = req.body.status;
+
+    if (typeof status !== "boolean"){
+        return res.status(400).json({msg: "Invalid status"});
+    }
 
     const updatedTodo = await collection.updateOne({ _id }, { $set: {status: !status} }); //$set is an operator from mongoDB
     res.status(200).json(updatedTodo);
